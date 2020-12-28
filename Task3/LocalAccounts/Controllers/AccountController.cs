@@ -16,6 +16,7 @@ using Microsoft.Owin.Security.OAuth;
 using LocalAccounts.Models;
 using LocalAccounts.Providers;
 using LocalAccounts.Results;
+using Newtonsoft.Json;
 
 namespace LocalAccounts.Controllers
 {
@@ -382,6 +383,31 @@ namespace LocalAccounts.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        [AllowAnonymous]
+        [Route("Verify")]
+        public async Task<bool> Verify(RegisterBindingModel model)
+        {
+            CaptchaRequest requestData = new CaptchaRequest
+            {
+                response = model.RecaptchaSiteKey
+            };
+
+            HttpClient client = new HttpClient();
+            var values = new Dictionary<string, string>
+            {
+                {"secret", requestData.secret },
+                {"response", requestData.response }
+            };
+
+            var requestBody = new FormUrlEncodedContent(values);
+            var res = await client.PostAsync("https://www.google.com/recaptcha/api/siteverify", requestBody);
+            var resStr = await res.Content.ReadAsStringAsync();
+            CaptchaResponse resJson = JsonConvert.DeserializeObject<CaptchaResponse>(resStr);
+
+            var result = resJson.success && resJson.score > 0.5;
+            return result;
         }
 
         #region Helpers

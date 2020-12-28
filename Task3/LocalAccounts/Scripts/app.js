@@ -1,4 +1,5 @@
-﻿function ViewModel() {
+﻿src = "https://www.google.com/recaptcha/api.js"
+function ViewModel() {
     var self = this;
 
     var tokenKey = 'accessToken';
@@ -55,25 +56,47 @@
             self.result(data);
         }).fail(showError);
     }
+    src = "https://www.google.com/recaptcha/api.js?render=6LdjqRcaAAAAAPHyJjlUyNF_HsI_1waOw8R_gOcM"
 
     self.register = function () {
         self.result('');
         self.errors.removeAll();
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LdjqRcaAAAAAPHyJjlUyNF_HsI_1waOw8R_gOcM', { action: 'login' }).then(function (token) {
+                var data = {
+                    Email: self.registerEmail(),
+                    Password: self.registerPassword(),
+                    ConfirmPassword: self.registerPassword2(),
+                    RecaptchaSiteKey: token
+                };
 
-        var data = {
-            Email: self.registerEmail(),
-            Password: self.registerPassword(),
-            ConfirmPassword: self.registerPassword2()
-        };
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/Account/Verify',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data)
+                }).done(function (check) {
+                    if (check) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/Account/Register',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify(data)
+                        }).done(function (data) {
+                            self.result("Done!");
+                        }).fail(showError);
+                    }
+                    else {
+                        console.log('VERIFICATION FAILED');
+                    }
+                }).fail(function (error) {
+                    showError(error)
+                });
 
-        $.ajax({
-            type: 'POST',
-            url: '/api/Account/Register',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function (data) {
-            self.result("Done!");
-        }).fail(showError);
+            });
+        });
+
+
     }
 
     self.login = function () {
