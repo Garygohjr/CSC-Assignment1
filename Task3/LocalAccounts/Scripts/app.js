@@ -56,7 +56,6 @@ function ViewModel() {
             self.result(data);
         }).fail(showError);
     }
-    src = "https://www.google.com/recaptcha/api.js?render=6LdjqRcaAAAAAPHyJjlUyNF_HsI_1waOw8R_gOcM"
 
     self.register = function () {
         self.result('');
