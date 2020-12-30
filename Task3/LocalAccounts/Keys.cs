@@ -5,7 +5,7 @@ using System.Web;
 
 namespace LocalAccounts
 {
-    public class Credentials
+    public class Keys
     {
         public static string secretKey = "6LdjqRcaAAAAAJtpKAuEGZkoz6lUpANUkPKfJT-F";
     }

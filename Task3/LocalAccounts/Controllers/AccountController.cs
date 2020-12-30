@@ -397,7 +397,7 @@ namespace LocalAccounts.Controllers
             HttpClient client = new HttpClient();
             var values = new Dictionary<string, string>
             {
-                {"secret", Credentials.secretKey },
+                {"secret", Keys.secretKey },
                 {"response", requestData.response }
             };
 
