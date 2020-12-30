@@ -9,8 +9,10 @@ using Task4_Restful.Models;
 
 namespace Task4_Restful.Controllers
 {
+    [RequireHttps]
     public class TalentsController : ApiController
     {
+        
         static readonly TalentRepository repository = new TalentRepository();
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         [Route("api/talents")]
