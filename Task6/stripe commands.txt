@@ -1,0 +1,2 @@
+4000008260000000
+stripe listen --forward-to https://localhost:44302/api/StripeWebHook
