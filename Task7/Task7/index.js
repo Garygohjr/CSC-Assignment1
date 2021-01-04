@@ -1,12 +1,14 @@
-﻿var clarifaiApiKey = '1f3855a8b0b64c01b5d3a1a1816af4f9';
-var workflowId = 'General';
+﻿var clarifaiApiKey = '';
+var workflowId = '';
+var imageData = '';
 
 // Handles image upload
 function uploadImage() {
+    clarifaiApiKey = '1f3855a8b0b64c01b5d3a1a1816af4f9';
+    workflowId = 'General'
     var app = new Clarifai.App({
         apiKey: clarifaiApiKey
     });
-
     var preview = document.getElementById('img');
     var file = document.querySelector('input[type=file]').files[0];
     var reader = new FileReader();
@@ -14,8 +16,8 @@ function uploadImage() {
     document.getElementById("loader").style.display = "unset";
     preview.style.display = "none";
     reader.addEventListener("load", function () {
-        veryfiImage(reader.result);
-        var imageData = reader.result;
+        //veryfiImage(reader.result);
+        imageData = reader.result;
         imageData = imageData.replace(/^data:image\/(.*);base64,/, '');
         app.inputs.create([
             {
@@ -42,7 +44,7 @@ function uploadImage() {
                     } else {
                         $(".analysis").html("<p> is probably not a receipt </p>");
                     }
-                    preview.src = reader.result;
+                    preview.src = reader.result;            
                     document.getElementById("loader").style.display = "none";
                     preview.style.display = "inherit";
                 },
@@ -72,22 +74,28 @@ function getModels() {
     );
 }
 
-function veryfiImage(base64string) {
-    //$.ajax({
-    //    type: 'POST',
-    //    url: 'api/v1/verify/verifi',
-    //    dataType: 'string',
-    //    data: base64string
-    //}).done(function (response) {
-    //    console.log(response);
-    //}).fail(function (error) {
-    //    console.log(error);
-    //});
+function receiptAmount() {
+    clarifaiApiKey = "844f9cf015604012a02c13f624d999de";
+    workflowId = "Visual-Text-Recognition";
+    var texthtml = 'Potential Total Cost: <br>';
+    var receiptApp = new Clarifai.App({
+        apiKey: clarifaiApiKey
+    });
 
-    $.getJSON('api/v1/verify/verifi?' + base64string)
-        .done(function (data) {
-            console.log(data);
-        }).fail(function (error) {
-            console.log(error);
-        });
+    receiptApp.workflow.predict(workflowId, { base64: imageData }).then(
+        function (response) {
+            var cost = 'Total cost is probably:'
+            var outputs = response.results[0].outputs[2].data.regions;
+            outputs.forEach(function (output) {
+                console.log(output.data.text.raw);
+                if (output.data.text.raw.includes('.')){
+                    cost += "<br>" + output.data.text.raw;
+                }
+            })
+            $(".cost").html(cost);
+        },
+        function (err) {
+            console.log(err)
+        }
+    )
 }
