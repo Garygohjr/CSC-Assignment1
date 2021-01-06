@@ -361,8 +361,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-
 Task3/LocalAccounts/Keys.cs
 Task6/Task6/Credentials.cs
-Task7/Task7/Models/Keys.cs
 Task7/Task7/keys.json
+Task3/LocalAccounts/Keys.cs
+Task5/Task5/Task5/keys.json
