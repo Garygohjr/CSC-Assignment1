@@ -62,19 +62,20 @@ function ViewModel() {
         self.errors.removeAll();
         grecaptcha.ready(function () {
             grecaptcha.execute('6LdjqRcaAAAAAPHyJjlUyNF_HsI_1waOw8R_gOcM', { action: 'login' }).then(function (token) {
-                var data = {
-                    Email: self.registerEmail(),
-                    Password: self.registerPassword(),
-                    ConfirmPassword: self.registerPassword2(),
+                var key = {
                     RecaptchaSiteKey: token
-                };
-
+                }
                 $.ajax({
                     type: 'POST',
                     url: '/api/Account/Verify',
                     contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(data)
+                    data: JSON.stringify(key)
                 }).done(function (check) {
+                    var data = {
+                        Email: self.registerEmail(),
+                        Password: self.registerPassword(),
+                        ConfirmPassword: self.registerPassword2(),
+                    };
                     if (check) {
                         $.ajax({
                             type: 'POST',
