@@ -83,3 +83,6 @@ C:\Users\ASUS\Desktop\FYP\CSC-Assignment1\Task5\Task5\obj\Debug\Task5.csproj.Cor
 C:\Users\ASUS\Desktop\FYP\CSC-Assignment1\Task5\Task5\obj\Debug\Task5.csproj.CopyComplete
 C:\Users\ASUS\Desktop\FYP\CSC-Assignment1\Task5\Task5\obj\Debug\Task5.dll
 C:\Users\ASUS\Desktop\FYP\CSC-Assignment1\Task5\Task5\obj\Debug\Task5.pdb
+C:\Users\ASUS\Desktop\FYP\CSC-Assignment1\Task5\Task5\bin\System.Web.Cors.dll
+C:\Users\ASUS\Desktop\FYP\CSC-Assignment1\Task5\Task5\bin\System.Web.Http.Cors.dll
+C:\Users\ASUS\Desktop\FYP\CSC-Assignment1\Task5\Task5\bin\System.Web.Http.Cors.xml
