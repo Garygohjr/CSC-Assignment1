@@ -1,7 +1,14 @@
 ﻿@section Scripts {
     @Scripts.Render("~/bundles/app")
-    <script src="https://www.google.com/recaptcha/api.js?render=6LdjqRcaAAAAAPHyJjlUyNF_HsI_1waOw8R_gOcM"></script>
 
+    <script src="https://www.google.com/recaptcha/api.js?render=6LdjqRcaAAAAAPHyJjlUyNF_HsI_1waOw8R_gOcM"></script>
+    <script type="text/javascript">
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LdjqRcaAAAAAPHyJjlUyNF_HsI_1waOw8R_gOcM', { action: 'login' }).then(function (token) {
+                console.log("recaptchatoken: " + token);
+            });
+        });
+    </script>
 }
 
 <div class="row">
