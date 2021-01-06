@@ -49,6 +49,7 @@ namespace Task6.Controllers
                 address.Line2 = model.AddressLine2;
                 address.PostalCode = model.AddressPostalcode;
                 address.City = model.AddressCity;
+                address.Country = model.AddressCountry;
 
                 StripeConfiguration.ApiKey = ApiKey;
 
@@ -96,6 +97,7 @@ namespace Task6.Controllers
                             Price = "price_1I5WIVKZfnMuvFdbiyfwpkB0",
                         },
                     },
+                    //TrialEnd = DateTimeOffset.FromUnixTimeSeconds(1609919880).UtcDateTime,
                 };
                 var service = new SubscriptionService();
                 var subscription = service.Create(options);
