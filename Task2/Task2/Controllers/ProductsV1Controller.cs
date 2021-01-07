@@ -25,7 +25,7 @@ namespace Task2.Controllers
             }
 
             [HttpGet]
-            [Route("api/v1/products/{id:int:min(2)}", Name = "getProductByIdv1")]
+            [Route("api/v1/products/{id:int}", Name = "getProductByIdv1")]
 
             public Product retrieveProductfromRepository(int id)
             {
