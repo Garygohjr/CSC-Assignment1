@@ -16,10 +16,9 @@
     </header>
     <div class="container">
         <div class="upload-photo">
-            <input class="file-upload" type="file" onchange="uploadImage()">
+            <input class="file-upload" type="file" accept=".png,.jpg,.jpeg">
             <img src="guraLoading.gif" id="loader">
-            <button class="getModels" onclick="getModels()"> Get Models </button>
-            <button class="getCost" onclick="receiptAmount()"> Get costs</button>
+            <button class="upload" onclick="uploadImage()"> Upload </button>
             <div class="photo-container">
                 <img class="photo" src="" alt="Image preview" id="img">
             </div>

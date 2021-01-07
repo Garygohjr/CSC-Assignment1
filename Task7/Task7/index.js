@@ -3,13 +3,12 @@ var workflowId = '';
 var imageData = '';
 var keys;
 $(document).ready(function () {
-    $.getJSON("./keys.json", function (data) {
+    $.getJSON("./task7Keys.json", function (data) {
         keys = data;
     });
 });
 // Handles image upload
 function uploadImage() {
-    console.log(keys);
     var app = new Clarifai.App({
         apiKey: keys.generalKey.key
     });
@@ -17,6 +16,7 @@ function uploadImage() {
     var file = document.querySelector('input[type=file]').files[0];
     var reader = new FileReader();
     $(".analysis").html("");
+    $(".cost").html("");
     document.getElementById("loader").style.display = "unset";
     preview.style.display = "none";
     reader.addEventListener("load", function () {
@@ -44,6 +44,7 @@ function uploadImage() {
                     var concepts = response['outputs'][0]['data']['concepts'];
                     if (concepts[0].value > 0.5) {
                         $(".analysis").html("<p> is probably a receipt </p>");
+                        receiptAmount();
                     } else {
                         $(".analysis").html("<p> is probably not a receipt </p>");
                     }
@@ -63,35 +64,10 @@ function uploadImage() {
     }
 }
 
-function getModels() {
-    app.models.list().then(
-        function (response) {
-            var ids = response.rawData;
-
-            console.log(response);
-            console.log(ids);
-        },
-        function (err) {
-            alert(err);
-        }
-    );
-}
-
 function receiptAmount() {
     var receiptApp = new Clarifai.App({
         apiKey: keys.visualKey.key
     });
-    receiptApp.models.list().then(
-        function (response) {
-            var ids = response.rawData;
-
-            console.log(response);
-            console.log(ids);
-        },
-        function (err) {
-            alert(err);
-        }
-    );
     receiptApp.workflow.predict(keys.visualKey.workflowid, { base64: imageData }).then(
         function (response) {
             var cost = 'Total cost is probably:'
