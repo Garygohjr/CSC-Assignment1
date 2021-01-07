@@ -20,7 +20,7 @@ namespace Task6.Controllers
 
         [Microsoft.AspNetCore.Mvc.HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Customer(StripeCharge model)
+        public async Task<ActionResult> NewCustomer(StripeCharge model)
         {
             if (!ModelState.IsValid)
             {
@@ -36,7 +36,6 @@ namespace Task6.Controllers
             //create customer -> add card -> subscribe -> show portal
 
             return Redirect(sessionUrl);
-            //return View("Index");
         }
 
         private static async Task<string> CreateCustomer(StripeCharge model)
@@ -97,7 +96,6 @@ namespace Task6.Controllers
                             Price = "price_1I5WIVKZfnMuvFdbiyfwpkB0",
                         },
                     },
-                    //TrialEnd = DateTimeOffset.FromUnixTimeSeconds(1609919880).UtcDateTime,
                 };
                 var service = new SubscriptionService();
                 var subscription = service.Create(options);
