@@ -1,5 +1,4 @@
 ﻿@model Task6.Models.StripeCharge
-@{
     ViewData["Title"] = "Stripe";
 }
 
@@ -43,7 +42,7 @@
         </dd>
     </dl>
 </div>
-@using (Html.BeginForm("Customer", "Stripe", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "frmCharge" }))
+@using (Html.BeginForm("NewCustomer", "Stripe", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "frmCharge" }))
 {
     @Html.AntiForgeryToken()
     <dl class="dl-horizontal">
