@@ -10,7 +10,7 @@
     <script>    
         var keys;
         $(document).ready(function () {
-            $.getJSON("./keys.json", function (data) {
+            $.getJSON("./task5Keys.json", function (data) {
                 keys = data;
             });
         });
@@ -64,9 +64,9 @@
                 } else {
                     counter++;
                     console.log(error);
-                    if (counter < 3) {
+                    if (counter < 10) {
                         listObjs()
-                        console.log(counter)
+                        $("#retryCounter").html("<p>Retry Counter: " + counter + "</p>");
                     } else {
                         alert("Failed to get files")
                         counter = 0;
@@ -83,6 +83,9 @@
             var params = {
                 "long_url": longurl
             };
+            if (counter > 0) {
+                $("#retryCounter").html("<p>Retry Counter: " + counter + "</p>");
+            }
             jQuery.each(data.Contents, function (index, obj) {
                 longurl = "https://s3.amazonaws.com/" + keys.s3BucketName + "/" + obj.Key;
                 params = {
@@ -116,10 +119,9 @@
 <body>
     <input type="file" name="file" id="file" value="dataFile" required="" accept=".png,.jpg,.jpeg,.gif">
     <button onclick="uploadFile()">Upload to S3</button>
-    <button onclick="listObjs()">
-        S3 - List Objects
-    </button>
+    <button onclick="listObjs()"> S3 - List Objects </button>
     <img src="guraloading.gif" id="loader" style="display:none">
+    <div id="retryCounter" style="font-size:48px"></div>
     <div id="objKeys"></div>
     <div id="objImgs"></div>
 </body>
