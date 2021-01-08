@@ -46,6 +46,7 @@
 
     </script>
     <script type="text/javascript">
+        var counter = 0;
         function listObjs() {
             AWS.config.update({
                 accessKeyId: keys.accessKeyId,
@@ -56,51 +57,69 @@
             var s3 = new AWS.S3({
                 params: { Bucket: keys.s3BucketName }
             });
+            document.getElementById("loader").style.display = "unset";
             s3.listObjects(function (error, data) {
                 if (error === null) {
-                    var html_keys = 'Object Keys:<br />';
-                    var html_imgs = '';
-                    var longurl = "";
-                    var params = {
-                        "long_url": longurl
-                    };
-                    jQuery.each(data.Contents, function (index, obj) {
-                        longurl = "https://s3.amazonaws.com/" + keys.s3BucketName + "/" + obj.Key;
-                        params = {
-                            "long_url": longurl
-                        };
-                        $.ajax({
-                            url: "https://api-ssl.bitly.com/v4/shorten",
-                            cache: false,
-                            dataType: "json",
-                            method: "POST",
-                            contentType: "application/json",
-                            beforeSend: function (xhr) {
-                                xhr.setRequestHeader("Authorization", "Bearer " + keys.bitlyKey);
-                            },
-                            data: JSON.stringify(params)
-                        }).done(function (data) {
-                            html_keys += (index + ': '  + obj.Key + ' Link = ' + JSON.parse(JSON.stringify(data)).link + '<br />');
-                            jQuery("#objKeys").html(html_keys);
-                        }).fail(function (data) {
-                            console.log(data);
-                        });
-                        html_imgs += "<img src='" + "https://s3.amazonaws.com/"
-                            + keys.s3BucketName + "/" + obj.Key + "'/><br/>";
-                    });
-                    jQuery("#objImgs").html(html_imgs);
-
-                } else { console.log(error); }
+                    shortenLink(data);
+                } else {
+                    counter++;
+                    console.log(error);
+                    if (counter < 3) {
+                        listObjs()
+                        console.log(counter)
+                    } else {
+                        alert("Failed to get files")
+                        counter = 0;
+                        document.getElementById("loader").style.display = "none";
+                    }
+                }
             });
-        }</script>
+        }
+
+        function shortenLink(data) {
+            var html_keys = 'Object Keys:<br />';
+            var html_imgs = '';
+            var longurl = "";
+            var params = {
+                "long_url": longurl
+            };
+            jQuery.each(data.Contents, function (index, obj) {
+                longurl = "https://s3.amazonaws.com/" + keys.s3BucketName + "/" + obj.Key;
+                params = {
+                    "long_url": longurl
+                };
+                $.ajax({
+                    url: "https://api-ssl.bitly.com/v4/shorten",
+                    cache: false,
+                    dataType: "json",
+                    method: "POST",
+                    contentType: "application/json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + keys.bitlyKey);
+                    },
+                    data: JSON.stringify(params)
+                }).done(function (data) {
+                    html_keys += (index + ': ' + obj.Key + ' Link = ' + JSON.parse(JSON.stringify(data)).link + '<br />');
+                    jQuery("#objKeys").html(html_keys);
+                }).fail(function (data) {
+                    alert("Failed to shorten links")
+                });
+                html_imgs += "<img src='" + "https://s3.amazonaws.com/"
+                    + keys.s3BucketName + "/" + obj.Key + "'/><br/>";
+            });
+            jQuery("#objImgs").html(html_imgs);
+            document.getElementById("loader").style.display = "none";
+        }
+    </script>
 
 </head>
 <body>
-    <input type="file" name="file" id="file" value="dataFile" required="" accept=".png,.jpg,.jpeg">
+    <input type="file" name="file" id="file" value="dataFile" required="" accept=".png,.jpg,.jpeg,.gif">
     <button onclick="uploadFile()">Upload to S3</button>
     <button onclick="listObjs()">
         S3 - List Objects
     </button>
+    <img src="guraloading.gif" id="loader" style="display:none">
     <div id="objKeys"></div>
     <div id="objImgs"></div>
 </body>
