@@ -69,6 +69,7 @@
                         $("#retryCounter").html("<p>Retry Counter: " + counter + "</p>");
                     } else {
                         alert("Failed to get files")
+                        $("#retryCounter").html("");
                         counter = 0;
                         document.getElementById("loader").style.display = "none";
                     }
